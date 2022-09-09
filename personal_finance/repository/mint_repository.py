@@ -3,7 +3,7 @@ import os
 import mintapi
 import pandas as pd
 
-from personal_finance.utils.constants import FILE_DIR
+from personal_finance.utils import constants
 
 
 class MintRepository:
@@ -27,7 +27,7 @@ class MintRepository:
         df = self.get_transaction_data()
         if not os.path.isdir(file_dir):
             os.makedirs(file_dir)
-        df.to_csv(os.path.join(file_dir, "transactions_raw.csv"))
+        df.to_parquet(os.path.join(file_dir, "transactions_raw.parquet"))
         return df
 
     def get_transaction_data(self) -> pd.DataFrame:

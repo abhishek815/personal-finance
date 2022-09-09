@@ -1,1 +1,3 @@
-FILE_DIR = "personal_finance/data"
+FILE_DIR = "./personal_finance/data"
+
+EXCLUDE_CREDIT = ["Investments", "Transfer", "Paycheck"]

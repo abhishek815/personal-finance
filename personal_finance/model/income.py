@@ -17,11 +17,9 @@ class Income(FinanceType):
         super().__init__(data_dir)
 
     def transform(self, month: int) -> pd.DataFrame:
-        month = utils.determine_month(month)
-        filtered = self.data.loc[
-            (self.data["date"] >= f"2022-{month}-01")
-            & (self.data["date"] <= f"2022-{month}-31")
-        ]
+        filtered = super().transform(month)
+        if not len(filtered):
+            return pd.DataFrame(columns=constants.FINAL_COLS)
         cash_credit = filtered.loc[filtered["type"] == "CashAndCreditTransaction"]
         paycheck = []
         for _, values in cash_credit.iterrows():

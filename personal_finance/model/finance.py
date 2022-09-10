@@ -11,5 +11,13 @@ class FinanceType(ABC):
         self.data = pd.read_parquet(os.path.join(data_dir, "transactions_raw.parquet"))
 
     @abstractmethod
-    def transform(self, month: int) -> pd.DataFrame:
+    def get_aggregated_monthly(self) -> pd.DataFrame:
         pass
+
+    def transform(self, month: int) -> pd.DataFrame:
+        month = utils.determine_month(month)
+        filtered = self.data.loc[
+            (self.data["date"] >= f"2022-{month}-01")
+            & (self.data["date"] <= f"2022-{month}-31")
+        ]
+        return filtered

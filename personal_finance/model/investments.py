@@ -17,12 +17,9 @@ class Investments(FinanceType):
         super().__init__(data_dir)
 
     def transform(self, month: int) -> pd.DataFrame:
-        month = utils.determine_month(month)
-        filtered = self.data.loc[
-            (self.data["date"] >= f"2022-{month}-01")
-            & (self.data["date"] <= f"2022-{month}-31")
-        ]
-
+        filtered = super().transform(month)
+        if not len(filtered):
+            return pd.DataFrame(columns=constants.FINAL_COLS + [constants.INVESTMENT])
         investment = filtered.loc[filtered["type"] == "InvestmentTransaction"]
 
         final_investments = investment.loc[investment["isExpense"] == False]

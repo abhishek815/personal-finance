@@ -5,26 +5,18 @@ from hashlib import new
 file_dir = os.path.dirname(__file__)
 sys.path.append(file_dir)
 
-import json
-from functools import reduce
-
 import pandas as pd
 from finance import FinanceType
 
 from personal_finance.utils import constants, utils
-
-pd.options.mode.chained_assignment = None
 
 
 class Spending(FinanceType):
     def __init__(self, data_dir: str = constants.FILE_DIR) -> None:
         super().__init__(data_dir)
 
-    def transform(self, month: int) -> pd.DataFrame:
-        filtered = super().transform(month)
-
-        if not len(filtered):
-            return pd.DataFrame(columns=constants.FINAL_COLS + ["payment_type"])
+    def transform(self, month: int, year: int) -> pd.DataFrame:
+        filtered = super().transform(month, year)
         # retreive all cash and credit type transactions
         cash_credit = filtered.loc[filtered["type"] == "CashAndCreditTransaction"]
 
@@ -39,6 +31,9 @@ class Spending(FinanceType):
             ):
                 new_df.append(values)
                 categories.append(category)
+
+        if not len(new_df):
+            return pd.DataFrame(columns=constants.FINAL_COLS + ["payment_type"])
 
         cash_credit = pd.DataFrame(new_df)
         cash_credit[constants.CATEGORY] = categories
@@ -62,23 +57,4 @@ class Spending(FinanceType):
                     break
             i += 1
         df[constants.CATEGORY] = new_type
-        return df
-
-    def get_aggregated_monthly(self) -> pd.DataFrame:
-        dfs = []
-        for month in constants.MONTHS:
-            df = self.transform(month=month)
-            month_df = (
-                df.groupby([constants.CATEGORY])
-                .agg({"amount": sum})
-                .rename(columns={"amount": constants.MONTHS_MAPPING[month]})
-            )
-            if len(month_df):
-                dfs.append(month_df)
-        df = reduce(
-            lambda left, right: pd.merge(
-                left, right, on=["category_type"], how="outer"
-            ),
-            dfs,
-        ).fillna(0)
         return df

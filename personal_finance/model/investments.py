@@ -16,23 +16,26 @@ class Investments(FinanceType):
     def __init__(self, data_dir: str = constants.FILE_DIR) -> None:
         super().__init__(data_dir)
 
-    def transform(self, month: int) -> pd.DataFrame:
-        filtered = super().transform(month)
-        if not len(filtered):
-            return pd.DataFrame(columns=constants.FINAL_COLS + [constants.INVESTMENT])
-        investment = filtered.loc[filtered["type"] == "InvestmentTransaction"]
+    def transform(self, month: int, year: int) -> pd.DataFrame:
+        filtered = super().transform(month, year)
 
+        investment = filtered.loc[filtered["type"] == "InvestmentTransaction"]
         final_investments = investment.loc[investment["isExpense"] == False]
+
         final_investments[constants.CATEGORY] = "Investments"
 
         final_investments = final_investments[
             final_investments[["price", "quantity"]].isna().any(axis=1)
         ]
+        if not len(final_investments):
+            return pd.DataFrame(columns=constants.FINAL_COLS)
 
         investment_type = []
         for _, values in final_investments.iterrows():
             investment_type.append(values["accountRef"]["name"])
-        print(investment_type)
-        final_investments[constants.INVESTMENT] = investment_type
+        final_investments[constants.CATEGORY] = investment_type
 
-        return final_investments[constants.FINAL_COLS + [constants.INVESTMENT]]
+        return self.collapse(final_investments[constants.FINAL_COLS])
+
+    def collapse(self, df: pd.DataFrame) -> pd.DataFrame:
+        return df

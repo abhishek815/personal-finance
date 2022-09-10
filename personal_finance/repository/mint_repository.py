@@ -30,10 +30,10 @@ class MintRepository:
             f'Successfully connected to mint with email {os.environ.get("MINT_EMAIL")}'
         )
 
-    def get_data(self, file_dir: str = "./personal_finance/data") -> pd.DataFrame:
+    def get_data(self, file_dir: str = constants.FILE_DIR) -> pd.DataFrame:
         df = self.get_transaction_data()
         utils.check_dir(file_dir)
-        file_path = os.path.join(file_dir, "transactions_raw.parquet")
+        file_path = os.path.join(file_dir, constants.RAW_FILE_NAME)
         df.to_parquet(file_path)
 
         LOGGER.info(f"Pulled transaction data and saved to {file_path}")

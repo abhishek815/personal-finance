@@ -11,7 +11,7 @@ pd.options.mode.chained_assignment = None
 
 class FinanceType(ABC):
     def __init__(self, data_dir) -> None:
-        self.data = pd.read_parquet(os.path.join(data_dir, "transactions_raw.parquet"))
+        self.data = pd.read_parquet(os.path.join(data_dir, constants.RAW_FILE_NAME))
 
     @abstractmethod
     def collapse(self, df: pd.DataFrame) -> pd.DataFrame:

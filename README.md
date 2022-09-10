@@ -4,7 +4,7 @@
 
 ## Prerequisite
 - [Intuit Mint Account](https://mint.intuit.com/)
-- IMAP Enabled on the email account associated your Mint Account (currently only compatible with gmail)
+- IMAP Enabled on the email account associated with your Mint Account (currently only compatible with gmail)
 - Enviornment variables:
 ```
 export MINT_EMAIL=XXX@gmail.com

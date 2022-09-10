@@ -1,3 +1,6 @@
+import os
+
+
 def determine_month(month: int):
     if month >= 1 and month < 10:
         return f"0{month}"
@@ -5,3 +8,8 @@ def determine_month(month: int):
         return month
     else:
         raise Exception("Invalid month value, please enter a value between 1 and 12")
+
+
+def check_dir(file_dir):
+    if not os.path.isdir(file_dir):
+        os.makedirs(file_dir)

@@ -14,6 +14,7 @@ from personal_finance.utils import constants, utils
 class Spending(FinanceType):
     def __init__(self, data_dir: str = constants.FILE_DIR) -> None:
         super().__init__(data_dir)
+        self.name = "spending"
 
     def transform(self, month: int, year: int) -> pd.DataFrame:
         filtered = super().transform(month, year)

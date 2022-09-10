@@ -3,7 +3,10 @@ import os
 import mintapi
 import pandas as pd
 
-from personal_finance.utils import constants
+from personal_finance.utils import constants, utils
+from personal_finance.utils.logger import get_logger
+
+LOGGER = get_logger(__name__)
 
 
 class MintRepository:
@@ -23,11 +26,17 @@ class MintRepository:
             imap_folder="INBOX",  # IMAP folder that receives MFA email
         )
 
+        LOGGER.info(
+            f'Successfully connected to mint with email {os.environ.get("MINT_EMAIL")}'
+        )
+
     def get_data(self, file_dir: str = "./personal_finance/data") -> pd.DataFrame:
         df = self.get_transaction_data()
-        if not os.path.isdir(file_dir):
-            os.makedirs(file_dir)
-        df.to_parquet(os.path.join(file_dir, "transactions_raw.parquet"))
+        utils.check_dir(file_dir)
+        file_path = os.path.join(file_dir, "transactions_raw.parquet")
+        df.to_parquet(file_path)
+
+        LOGGER.info(f"Pulled transaction data and saved to {file_path}")
         return df
 
     def get_transaction_data(self) -> pd.DataFrame:

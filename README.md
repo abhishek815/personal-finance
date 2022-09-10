@@ -16,8 +16,7 @@ export EMAIL_PWD=XXX
 ```
 pip install -r requirements.txt
 PYTHONPATH=${PYTHONPATH}:${PWD}
-python personal_finance/run.py -y 2022 
+python personal_finance/run.py -y 2022
 ```
 
 The -y flag is the year you would like to generate data for and -f is the file directory you would like to store the data in. These values are defaulted to year=`2022` and file_dir=`./personal_finance/data`
-

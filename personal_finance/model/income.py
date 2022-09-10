@@ -4,8 +4,6 @@ import sys
 file_dir = os.path.dirname(__file__)
 sys.path.append(file_dir)
 
-import json
-
 import pandas as pd
 from finance import FinanceType
 

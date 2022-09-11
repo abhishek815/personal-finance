@@ -1,7 +1,7 @@
 FILE_DIR = "./personal_finance/data"
 RAW_FILE_NAME = "transactions_raw.parquet"
 
-EXCLUDE_CREDIT = ["Investments", "Transfer", "Paycheck"]
+EXCLUDE_CREDIT = ["Investments", "Transfer", "Paycheck", "Income"]
 
 CATEGORY = "category_type"
 

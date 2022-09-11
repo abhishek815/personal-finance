@@ -31,7 +31,7 @@ class FinanceType(ABC):
 
         df = reduce(
             lambda left, right: pd.merge(
-                left, right, on=["category_type"], how="outer"
+                left, right, on=[constants.CATEGORY], how="outer"
             ),
             dfs,
         ).fillna(0)

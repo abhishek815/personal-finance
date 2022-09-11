@@ -37,6 +37,9 @@ def main(year, file_dir):
             offset=1,
         )
 
+        # create clean human-readable excel format
+        utils.to_excel_format(year, file_dir)
+
 
 if __name__ == "__main__":
     main()

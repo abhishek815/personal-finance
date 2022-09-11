@@ -21,8 +21,6 @@ class Investments(FinanceType):
         investment = filtered.loc[filtered["type"] == "InvestmentTransaction"]
         final_investments = investment.loc[investment["isExpense"] == False]
 
-        final_investments[constants.CATEGORY] = "Investments"
-
         final_investments = final_investments[
             final_investments[["price", "quantity"]].isna().any(axis=1)
         ]

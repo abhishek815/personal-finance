@@ -20,8 +20,12 @@ class Income(FinanceType):
         income = filtered.loc[filtered["type"] == "CashAndCreditTransaction"]
 
         paycheck = []
+        # TODO: seperate out paycheck and extra forms of income
         for _, values in income.iterrows():
-            if values["category"]["name"] == "Paycheck":
+            if (
+                values["category"]["name"] == "Paycheck"
+                or values["category"]["name"] == "Income"
+            ):
                 paycheck.append(values)
 
         if not len(paycheck):

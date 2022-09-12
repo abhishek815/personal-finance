@@ -11,20 +11,32 @@ LOGGER = get_logger(__name__)
 
 class MintRepository:
     def __init__(self, headless=True, mfa_method="email") -> None:
-        self.mint = mintapi.Mint(
-            os.environ.get("MINT_EMAIL"),  # Email used to log in to Mint
-            os.environ.get("MINT_PWD"),  # Your password used to log in to mint
-            headless=headless,
-            mfa_method=mfa_method,
-            imap_account=os.environ.get(
-                "MINT_EMAIL"
-            ),  # account name used to log in to your IMAP server
-            imap_password=os.environ.get(
-                "EMAIL_PWD"
-            ),  # account password used to log in to your IMAP server
-            imap_server="imap.gmail.com",  # IMAP server host name
-            imap_folder="INBOX",  # IMAP folder that receives MFA email
-        )
+        LOGGER.info(f"Signing in and scraping your Mint account.")
+        try:
+            self.mint = mintapi.Mint(
+                os.environ.get("MINT_EMAIL"),  # Email used to log in to Mint
+                os.environ.get("MINT_PWD"),  # Your password used to log in to mint
+                headless=headless,
+                mfa_method=mfa_method,
+                imap_account=os.environ.get(
+                    "MINT_EMAIL"
+                ),  # account name used to log in to your IMAP server
+                imap_password=os.environ.get(
+                    "EMAIL_PWD"
+                ),  # account password used to log in to your IMAP server
+                imap_server="imap.gmail.com",  # IMAP server host name
+                imap_folder="INBOX",  # IMAP folder that receives MFA email
+            )
+        except:
+            LOGGER.warn(
+                f"Failed to authenticate using IMAP. Retrying with email MFA. Check your email account {os.environ.get('MINT_EMAIL')} for a 6 digit code."
+            )
+            self.mint = mintapi.Mint(
+                os.environ.get("MINT_EMAIL"),  # Email used to log in to Mint
+                os.environ.get("MINT_PWD"),  # Your password used to log in to mint
+                headless=headless,
+                mfa_method=mfa_method,
+            )
 
         LOGGER.info(
             f'Successfully connected to mint with email {os.environ.get("MINT_EMAIL")}'

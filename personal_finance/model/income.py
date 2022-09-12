@@ -19,6 +19,9 @@ class Income(FinanceType):
         filtered = super().transform(month, year)
         income = filtered.loc[filtered["type"] == "CashAndCreditTransaction"]
 
+        # TODO: make this check prettier
+        if not len(income):
+            return pd.DataFrame(columns=constants.FINAL_COLS)
         paycheck = []
         # TODO: seperate out paycheck and extra forms of income
         for _, values in income.iterrows():
@@ -28,6 +31,7 @@ class Income(FinanceType):
             ):
                 paycheck.append(values)
 
+        # TODO: make this check prettier
         if not len(paycheck):
             return pd.DataFrame(columns=constants.FINAL_COLS)
 

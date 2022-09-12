@@ -21,9 +21,15 @@ class Investments(FinanceType):
         investment = filtered.loc[filtered["type"] == "InvestmentTransaction"]
         final_investments = investment.loc[investment["isExpense"] == False]
 
+        # TODO: make this check prettier
+        if not len(final_investments):
+            return pd.DataFrame(columns=constants.FINAL_COLS)
+
         final_investments = final_investments[
             final_investments[["price", "quantity"]].isna().any(axis=1)
         ]
+
+        # TODO: make this check prettier
         if not len(final_investments):
             return pd.DataFrame(columns=constants.FINAL_COLS)
 

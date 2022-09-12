@@ -21,6 +21,10 @@ class Spending(FinanceType):
         # retreive all cash and credit type transactions
         cash_credit = filtered.loc[filtered["type"] == "CashAndCreditTransaction"]
 
+        # TODO: make this check prettier
+        if not len(cash_credit):
+            return pd.DataFrame(columns=constants.FINAL_COLS + ["payment_type"])
+
         new_df = []
         categories = []
         for _, values in cash_credit.iterrows():
@@ -33,6 +37,7 @@ class Spending(FinanceType):
                 new_df.append(values)
                 categories.append(category)
 
+        # TODO: make this check prettier
         if not len(new_df):
             return pd.DataFrame(columns=constants.FINAL_COLS + ["payment_type"])
 

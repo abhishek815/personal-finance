@@ -3,7 +3,7 @@ import sys
 
 import click
 
-from personal_finance.model import FINANCE_TYPES
+from personal_finance.model import income, investments, spending
 from personal_finance.repository.mint_repository import MintRepository
 from personal_finance.utils import constants, utils
 
@@ -13,7 +13,10 @@ from personal_finance.utils import constants, utils
 @click.option("-f", "--file_dir", default=constants.FILE_DIR)
 def main(year, file_dir):
     # Run repo to get data
-    MintRepository().get_data()
+    mint = MintRepository()
+    mint.get_data()
+
+    FINANCE_TYPES = [income.Income(), investments.Investments(), spending.Spending()]
 
     months_df_dict = {}
     for finance_type in FINANCE_TYPES:
@@ -37,8 +40,8 @@ def main(year, file_dir):
             offset=1,
         )
 
-        # create clean human-readable excel format
-        utils.to_excel_format(year, file_dir)
+    # create clean human-readable excel format
+    utils.to_excel_format(year, file_dir)
 
 
 if __name__ == "__main__":

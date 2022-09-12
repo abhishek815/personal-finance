@@ -106,7 +106,9 @@ def to_excel_format(year: int, file_dir: str):
 
     worksheet.set_column("A:M", 16)
 
-    format_header("#ffd965", worksheet,
+    format_header(
+        "#ffd965",
+        worksheet,
         workbook,
         investments_start_row,
         investments_end_row,
@@ -216,6 +218,8 @@ def format_header(color: str, worksheet, workbook, start_row, end_row, df):
         worksheet.write(start_row, col_num, value, format)
         if col_num == 0:
             worksheet.write(end_row, col_num, "TOTAL", format_total)
+        elif end_row - start_row == 1:
+            worksheet.write(end_row, col_num, 0)
         else:
             col_val = chr(ord("@") + (col_num + 1))
             worksheet.write_formula(
